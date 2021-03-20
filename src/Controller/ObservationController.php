@@ -5,16 +5,22 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Entity\Observations;
 
 class ObservationController extends AbstractController
 {
     /**
-     * @Route("/observation", name="observation")
+     * @Route("/api/observation/{pk}", name="observation")
      */
-    public function index(): Response
+    public function index(string $pk): Response
     {
-        return $this->render('observation/index.html.twig', [
-            'controller_name' => 'ObservationController',
-        ]);
+        $url = $_SERVER['REQUEST_URI'];
+        $url = str_replace("%20%", " ", $url);
+
+        $pk = new \DateTime(explode("/", $url)[3]);
+
+        return $this->json(
+            $this->getDoctrine()->getRepository(Observations::class)->find($pk)
+        );
     }
 }
