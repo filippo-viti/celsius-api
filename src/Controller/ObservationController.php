@@ -12,6 +12,7 @@ class ObservationController extends AbstractController
     /**
      * @Route("/api/observation/{pk}", name="observation")
      */
+    // FIXME
     public function index(string $pk): Response
     {
         $url = $_SERVER['REQUEST_URI'];
