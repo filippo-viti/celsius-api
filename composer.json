@@ -1,4 +1,6 @@
 {
+    "name": "salve/restwb_symfony",
+    "description": "salve",
     "type": "project",
     "license": "proprietary",
     "minimum-stability": "dev",
@@ -94,6 +96,11 @@
         "symfony": {
             "allow-contrib": false,
             "require": "5.2.*"
+        },
+        "patches": {
+            "drupal/core": {
+                "Add startup configuration for PHP server": "https://www.drupal.org/files/issues/add_a_startup-1543858-30.patch"
+            }
         }
     }
 }

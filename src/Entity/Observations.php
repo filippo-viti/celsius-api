@@ -13,13 +13,13 @@ use Doctrine\ORM\Mapping as ORM;
 class Observations
 {
     /**
-     * @var \DateTime
+     * @var string
      *
-     * @ORM\Column(name="time", type="datetime", nullable=false, options={"default"="0000-00-00 00:00:00"})
+     * @ORM\Column(name="time", type="string", nullable=false, options={"default"="0000-00-00 00:00:00"})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $time;
+    private $time = '0000-00-00 00:00:00';
 
     /**
      * @var string|null
@@ -63,7 +63,7 @@ class Observations
      */
     private $extHum;
 
-    public function getTime(): ?\DateTimeInterface
+    public function getTime(): ?string
     {
         return $this->time;
     }

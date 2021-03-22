@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2e854a8269769e7c69ef800ba12c62da",
+    "content-hash": "baf2597ea971eceeff7ae2d283036811",
     "packages": [
         {
             "name": "composer/package-versions-deprecated",
@@ -7864,16 +7864,16 @@
         },
         {
             "name": "symfony/maker-bundle",
-            "version": "v1.30.0",
+            "version": "v1.30.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/maker-bundle.git",
-                "reference": "a9ff8a8600b6354d79fd16c72c24757dcb086c3c"
+                "reference": "4021ece4955286e0816a34b3d545bf1a917afb0f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/maker-bundle/zipball/a9ff8a8600b6354d79fd16c72c24757dcb086c3c",
-                "reference": "a9ff8a8600b6354d79fd16c72c24757dcb086c3c",
+                "url": "https://api.github.com/repos/symfony/maker-bundle/zipball/4021ece4955286e0816a34b3d545bf1a917afb0f",
+                "reference": "4021ece4955286e0816a34b3d545bf1a917afb0f",
                 "shasum": ""
             },
             "require": {
@@ -7932,7 +7932,7 @@
             ],
             "support": {
                 "issues": "https://github.com/symfony/maker-bundle/issues",
-                "source": "https://github.com/symfony/maker-bundle/tree/v1.30.0"
+                "source": "https://github.com/symfony/maker-bundle/tree/v1.30.1"
             },
             "funding": [
                 {
@@ -7948,7 +7948,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-03-19T18:32:22+00:00"
+            "time": "2021-03-22T17:49:17+00:00"
         },
         {
             "name": "symfony/phpunit-bridge",
