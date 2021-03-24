@@ -22,9 +22,9 @@ class Observations
     private $id;
 
     /**
-     * @var \DateTime
+     * @var string
      *
-     * @ORM\Column(name="time", type="datetime", nullable=false)
+     * @ORM\Column(name="time", type="string", nullable=false)
      */
     private $time;
 
@@ -75,12 +75,12 @@ class Observations
         return $this->id;
     }
 
-    public function getTime(): \DateTime
+    public function getTime(): string
     {
         return $this->time;
     }
 
-    public function setTime(\DateTime $time): self
+    public function setTime(string $time): self
     {
         $this->time = $time;
 
