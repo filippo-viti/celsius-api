@@ -7,19 +7,26 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Observations
  *
- * @ORM\Table(name="OBSERVATIONS")
+ * @ORM\Table(name="OBSERVATIONS", uniqueConstraints={@ORM\UniqueConstraint(name="index_time", columns={"time"})})
  * @ORM\Entity
  */
 class Observations
 {
     /**
-     * @var string
+     * @var int
      *
-     * @ORM\Column(name="time", type="string", nullable=false, options={"default"="0000-00-00 00:00:00"})
+     * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $time = '0000-00-00 00:00:00';
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="time", type="string", nullable=false)
+     */
+    private $time;
 
     /**
      * @var string|null
@@ -63,9 +70,21 @@ class Observations
      */
     private $extHum;
 
-    public function getTime(): ?string
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getTime(): string
     {
         return $this->time;
+    }
+
+    public function setTime(\DateTimeInterface $time): self
+    {
+        $this->time = $time;
+
+        return $this;
     }
 
     public function getATemp(): ?string
