@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Observations
  *
  * @ORM\Table(name="OBSERVATIONS", uniqueConstraints={@ORM\UniqueConstraint(name="index_time", columns={"time"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\ObservationsRepository")
  */
 class Observations
 {
@@ -22,9 +22,9 @@ class Observations
     private $id;
 
     /**
-     * @var string
+     * @var \DateTime
      *
-     * @ORM\Column(name="time", type="string", nullable=false)
+     * @ORM\Column(name="time", type="datetime", nullable=false)
      */
     private $time;
 
@@ -75,12 +75,12 @@ class Observations
         return $this->id;
     }
 
-    public function getTime(): string
+    public function getTime(): \DateTime
     {
         return $this->time;
     }
 
-    public function setTime(\DateTimeInterface $time): self
+    public function setTime(\DateTime $time): self
     {
         $this->time = $time;
 
