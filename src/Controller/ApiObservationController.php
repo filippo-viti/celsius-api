@@ -25,10 +25,9 @@ class ApiObservationController extends AbstractFOSRestController
             return $this->json(
                 $repository->findOneBy(
                     [
-                        'time' => (new \DateTime($time))->format("Y-m-d H:i:s")
+                        'time' => new \DateTime($time)
                     ]
-                )
-            );
+            ));
         }
         else
         {
