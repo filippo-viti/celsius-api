@@ -2,85 +2,76 @@
 
 namespace App\Entity;
 
+use App\Repository\ObservationsRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Observations
- *
- * @ORM\Table(name="OBSERVATIONS", uniqueConstraints={@ORM\UniqueConstraint(name="index_time", columns={"time"})})
- * @ORM\Entity(repositoryClass="App\Repository\ObservationsRepository")
+ * @ORM\Entity(repositoryClass=ObservationsRepository::class)
  */
 class Observations
 {
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
+     * 
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
      */
     private $id;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="time", type="datetime", nullable=false)
+     * @Assert\NotBlank
+     * @ORM\Column(type="datetime")
      */
     private $time;
 
     /**
-     * @var string|null
-     *
-     * @ORM\Column(name="A_temp", type="decimal", precision=4, scale=2, nullable=true)
+     * @Assert\NotBlank
+     * @ORM\Column(type="decimal", precision=4, scale=2, nullable=true)
      */
-    private $aTemp;
+    private $A_temp;
 
     /**
-     * @var bool|null
-     *
-     * @ORM\Column(name="A_hum", type="boolean", nullable=true)
+     * @Assert\NotBlank
+     * @ORM\Column(type="integer", nullable=true)
      */
-    private $aHum;
+    private $A_hum;
 
     /**
-     * @var string|null
-     *
-     * @ORM\Column(name="B_temp", type="decimal", precision=4, scale=2, nullable=true)
+     * @Assert\NotBlank
+     * @ORM\Column(type="decimal", precision=4, scale=2, nullable=true)
      */
-    private $bTemp;
+    private $B_temp;
 
     /**
-     * @var bool|null
-     *
-     * @ORM\Column(name="B_hum", type="boolean", nullable=true)
+     * @Assert\NotBlank
+     * @ORM\Column(type="integer", nullable=true)
      */
-    private $bHum;
+    private $B_hum;
 
     /**
-     * @var string|null
-     *
-     * @ORM\Column(name="EXT_temp", type="decimal", precision=4, scale=2, nullable=true)
+     * @Assert\NotBlank
+     * @ORM\Column(type="decimal", precision=4, scale=2, nullable=true)
      */
-    private $extTemp;
+    private $EXT_temp;
 
     /**
-     * @var bool|null
-     *
-     * @ORM\Column(name="EXT_hum", type="boolean", nullable=true)
+     * @Assert\NotBlank
+     * @ORM\Column(type="integer", nullable=true)
      */
-    private $extHum;
+    private $EXT_hum;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getTime(): \DateTime
+    public function getTime(): ?\DateTimeInterface
     {
         return $this->time;
     }
 
-    public function setTime(\DateTime $time): self
+    public function setTime(\DateTimeInterface $time): self
     {
         $this->time = $time;
 
@@ -89,75 +80,73 @@ class Observations
 
     public function getATemp(): ?string
     {
-        return $this->aTemp;
+        return $this->A_temp;
     }
 
-    public function setATemp(?string $aTemp): self
+    public function setATemp(?string $A_temp): self
     {
-        $this->aTemp = $aTemp;
+        $this->A_temp = $A_temp;
 
         return $this;
     }
 
-    public function getAHum(): ?bool
+    public function getAHum(): ?int
     {
-        return $this->aHum;
+        return $this->A_hum;
     }
 
-    public function setAHum(?bool $aHum): self
+    public function setAHum(?int $A_hum): self
     {
-        $this->aHum = $aHum;
+        $this->A_hum = $A_hum;
 
         return $this;
     }
 
     public function getBTemp(): ?string
     {
-        return $this->bTemp;
+        return $this->B_temp;
     }
 
-    public function setBTemp(?string $bTemp): self
+    public function setBTemp(?string $B_temp): self
     {
-        $this->bTemp = $bTemp;
+        $this->B_temp = $B_temp;
 
         return $this;
     }
 
-    public function getBHum(): ?bool
+    public function getBHum(): ?int
     {
-        return $this->bHum;
+        return $this->B_hum;
     }
 
-    public function setBHum(?bool $bHum): self
+    public function setBHum(?int $B_hum): self
     {
-        $this->bHum = $bHum;
+        $this->B_hum = $B_hum;
 
         return $this;
     }
 
-    public function getExtTemp(): ?string
+    public function getEXTTemp(): ?string
     {
-        return $this->extTemp;
+        return $this->EXT_temp;
     }
 
-    public function setExtTemp(?string $extTemp): self
+    public function setEXTTemp(?string $EXT_temp): self
     {
-        $this->extTemp = $extTemp;
+        $this->EXT_temp = $EXT_temp;
 
         return $this;
     }
 
-    public function getExtHum(): ?bool
+    public function getEXTHum(): ?int
     {
-        return $this->extHum;
+        return $this->EXT_hum;
     }
 
-    public function setExtHum(?bool $extHum): self
+    public function setEXTHum(?int $EXT_hum): self
     {
-        $this->extHum = $extHum;
+        $this->EXT_hum = $EXT_hum;
 
         return $this;
     }
-
-
 }
