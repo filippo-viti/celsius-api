@@ -61,7 +61,8 @@ class ApiObservationController extends AbstractController
 
             return $this->json(
                 [
-                    "status" => "200 ok"]
+                    "status" => "200 ok"
+                ]
             );
         }
 
