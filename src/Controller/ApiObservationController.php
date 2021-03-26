@@ -50,9 +50,9 @@ class ApiObservationController extends AbstractController
         $c = new Observations();
         $form = $this->createForm(ObservationsType::class, $c); // di default il terzo parametro sarebbe ["method" => "POST"]
 
-        $form->submit($data);
-
         $manager = $this->getDoctrine()->getManager();
+
+        $form->submit($data, true);
 
         if ($form->isValid())
         {
@@ -61,13 +61,15 @@ class ApiObservationController extends AbstractController
 
             return $this->json(
                 [
-                    "status" => "200 ok"
+                    "stato" => "200 ok"
                 ]
             );
         }
-
+        
         return $this->json(
-            ["errore" => "I dati non sono stati inseriti"]
+            [
+                "errore" => "non è stato possibile inserire i dati"
+            ]
         );
     }
 
