@@ -21,6 +21,7 @@ class Observations
 
     /**
      * @Assert\NotBlank
+     * @Assert\Type("DateTime")
      * @ORM\Column(type="datetime")
      */
     private $time;
