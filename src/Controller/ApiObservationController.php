@@ -17,7 +17,7 @@ class ApiObservationController extends AbstractController
     /**
      * @Route("/{time?}", name="observation_get", methods={"GET"})
      */
-    public function index ($time = null): Response
+    public function getObservation($time = null): Response
     {
         $repository = $this->getDoctrine()->getRepository(Observations::class);
     
@@ -40,56 +40,74 @@ class ApiObservationController extends AbstractController
     /**
      * @Route("/", name="observation_post", methods={"POST"})
      */
-    public function indexPost (Request $req) : Response
+    public function createObservation(Request $req) : Response
     {
         $data = json_decode($req->getContent(), true);
 
-        $c = new Observations();
-        $form = $this->createForm(ObservationsType::class, $c); // di default il terzo parametro sarebbe ["method" => "POST"]
+        if ($this->exists($data["time"]))
+        {
+            return $this->error("The resource already exists", 409);
+        }
 
         $manager = $this->getDoctrine()->getManager();
 
-        $form->submit($data, true);
+        $o = $this->validateForm($data);
 
-        if ($form->isValid())
+        if ($o !== null)
         {
             $manager->persist($c);
             $manager->flush();
 
             return $this->json(
                 [
-                    "stato" => "200 ok"
+                    "status_code" => 200
                 ]
-            );
+            , 200);
         }
         
-        return $this->json(
-            [
-                "errore" => "non è stato possibile inserire i dati"
-            ]
-        );
+        return $this->error("Bad request", 400);
     }
 
     /**
      * @Route("/{pk}", name="observation_put", methods={"PUT"})
      */
-    public function indexPut (Request $req)
+    public function updateObservation(Request $req)
     {
+        $data = json_decode($req->getContent(), true);
 
+        $manager = $this->getDoctrine()->getManager();
+
+        $o = $this->validateForm($data);
+
+        if ($o !== null)
+        {
+            $manager->persist($o);
+            $manager->flush();
+
+            return $this->json(
+                [
+                    "status_code" => 200
+                ]
+            , 200);
+        }
+
+        return $this->error("Bad request", 400);
     }
 
     /**
      * @Route("/{pk}", name="observation_delete", methods={"DELETE"})
      */
-    public function indexDelete (string $pk)
+    public function deleteObservation(string $pk)
     {
         $repository = $this->getDoctrine()->getRepository(Observations::class);
 
-        if ($repository->find(intval($pk)) != null)
+        $o = $repository->find(intval($pk));
+
+        if ($o != null)
         {
             $manager = $this->getDoctrine()->getManager();
 
-            $manager->remove($repository->find(intval($pk)));
+            $manager->remove($o);
             $manager->flush();
 
             return $this->json([
@@ -97,8 +115,32 @@ class ApiObservationController extends AbstractController
             ], 200);
         }
 
-        return $this->json([
-            "status_code" => 404
-        ], 404);
+        return $this->error("Resource not found", 404);
+    }
+
+    private function validateForm(array $data) : Observation
+    {
+        $c = new Observations();
+        $form = $this->createForm(ObservationsType::class, $c); // di default il terzo parametro sarebbe ["method" => "POST"]
+
+        $form->submit($data);
+
+        return $form->isValid() ? $c : null;
+    }
+
+    private function exists($pk) : bool
+    {
+        $repository = $this->getDoctrine()->getRepository(Observations::class);
+
+        return $repository->find($pk) ? true : false;
+    }
+    
+    private function error(string $message, int $status_code)
+    {
+        return $this->json(
+            [
+                "error" => $message
+            ]
+        , $status_code);
     }
 }
