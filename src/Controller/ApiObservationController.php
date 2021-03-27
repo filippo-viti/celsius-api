@@ -6,7 +6,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use App\Entity\Observations;
 use App\Form\ObservationsType;
 
@@ -16,8 +15,7 @@ use App\Form\ObservationsType;
 class ApiObservationController extends AbstractController
 {
     /**
-     * @Route("/{time?}", name="observation_get")
-     * @Method("GET")
+     * @Route("/{time?}", name="observation_get", methods={"GET"})
      */
     public function index ($time = null): Response
     {
@@ -40,8 +38,7 @@ class ApiObservationController extends AbstractController
     }
 
     /**
-     * @Route("/", name="observation_post")
-     * @Method("POST")
+     * @Route("/", name="observation_post", methods={"POST"})
      */
     public function indexPost (Request $req) : Response
     {
@@ -74,8 +71,7 @@ class ApiObservationController extends AbstractController
     }
 
     /**
-     * @Route("/{pk}", name="observation_put")
-     * @Method("PUT")
+     * @Route("/{pk}", name="observation_put", methods={"PUT"})
      */
     public function indexPut (Request $req)
     {
@@ -83,11 +79,26 @@ class ApiObservationController extends AbstractController
     }
 
     /**
-     * @Route("/{pk}", name="observation_delete")
-     * @Method("DELETE")
+     * @Route("/{pk}", name="observation_delete", methods={"DELETE"})
      */
-    public function indexDelete (Request $req)
+    public function indexDelete (string $pk)
     {
+        $repository = $this->getDoctrine()->getRepository(Observations::class);
 
+        if ($repository->find(intval($pk)) != null)
+        {
+            $manager = $this->getDoctrine()->getManager();
+
+            $manager->remove($repository->find(intval($pk)));
+            $manager->flush();
+
+            return $this->json([
+                "status_code" => 200
+            ], 200);
+        }
+
+        return $this->json([
+            "status_code" => 404
+        ], 404);
     }
 }
