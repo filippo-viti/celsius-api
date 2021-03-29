@@ -148,7 +148,6 @@ class ApiObservationController extends AbstractController
         }
 
         $response = $this->json($data, $status_code);
-        $response->headers->set("Access-Control-Allow-Origin", "*");
 
         return $response;
     }
