@@ -55,7 +55,7 @@ class ApiObservationController extends AbstractController
 
         if ($o !== null)
         {
-            $manager->persist($c);
+            $manager->persist($o);
             $manager->flush();
 
             return $this->json(
@@ -118,7 +118,7 @@ class ApiObservationController extends AbstractController
         return $this->error("Resource not found", 404);
     }
 
-    private function validateForm(array $data) : Observation
+    private function validateForm(array $data) : Observations
     {
         $c = new Observations();
         $form = $this->createForm(ObservationsType::class, $c); // di default il terzo parametro sarebbe ["method" => "POST"]
