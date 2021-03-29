@@ -38,6 +38,18 @@ class ApiObservationController extends AbstractController
     }
 
     /**
+     * @Route("/{from}/{to}", name="observation_getFromTo", methods={"GET"})
+     */
+    public function getObservationFromTo(string $from, string $to)
+    {
+        $repository = $this->getDoctrine()->getRepository(Observations::class);
+
+        return $this->json(
+            $repository->findAllBetween($from, $to)
+        );
+    }
+
+    /**
      * @Route("/", name="observation_post", methods={"POST"})
      */
     public function createObservation(Request $req) : Response

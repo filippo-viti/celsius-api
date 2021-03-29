@@ -19,6 +19,16 @@ class ObservationsRepository extends ServiceEntityRepository
         parent::__construct($registry, Observations::class);
     }
 
+    public function findAllBetween(string $from, string $to)
+    {
+        $query = $this->createQueryBuilder('o')
+            ->andWhere("o.time BETWEEN :from AND :to")
+            ->setParameter("from", $from)
+            ->setParameter("to", $to);
+
+        return $query->getQuery()->getResult();
+    }
+
     // /**
     //  * @return Observations[] Returns an array of Observations objects
     //  */
