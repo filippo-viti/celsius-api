@@ -17,7 +17,7 @@ class ApiObservationController extends AbstractController
     /**
      * @Route("/{time?}", name="observation_get", methods={"GET"})
      */
-    public function getObservation($time = null): Response
+    public function getObservation(Request $request, $time = null): Response
     {
         $repository = $this->getDoctrine()->getRepository(Observations::class);
     
@@ -34,16 +34,16 @@ class ApiObservationController extends AbstractController
             $data = $repository->findAll();
         }
 
-        return $this->response($data);
+        return $this->response($request, $data);
     }
     /**
      * @Route("/{from}/{to}", name="observation_getFromTo", methods={"GET"})
      */
-    public function getObservationFromTo(string $from, string $to)
+    public function getObservationFromTo(Request $request, string $from, string $to)
     {
         $repository = $this->getDoctrine()->getRepository(Observations::class);
 
-        return $this->response($repository->findAllBetween($from, $to));
+        return $this->response($request ,$repository->findAllBetween($from, $to));
     }
 
     /**
@@ -55,7 +55,7 @@ class ApiObservationController extends AbstractController
 
         if ($this->exists($data["time"]))
         {
-            return $this->response([], "The resource already exists", 409);
+            return $this->response($req,[], "The resource already exists", 409);
         }
 
         $manager = $this->getDoctrine()->getManager();
@@ -74,7 +74,7 @@ class ApiObservationController extends AbstractController
             )->headers->set("Location", "/api/observations/$data[time]");
         }
         
-        return $this->response([], "Bad request", 400);
+        return $this->response($req, [], "Bad request", 400);
     }
 
     /**
@@ -94,7 +94,7 @@ class ApiObservationController extends AbstractController
             $manager->flush();
 
             return $this->response(
-                $this->getDoctrine()->getRepository(Observations::class)->findOneBy($data["time"])
+                $req, $this->getDoctrine()->getRepository(Observations::class)->findOneBy($data["time"])
             );
         }
 
@@ -104,7 +104,7 @@ class ApiObservationController extends AbstractController
     /**
      * @Route("/{pk}", name="observation_delete", methods={"DELETE"})
      */
-    public function deleteObservation(string $pk)
+    public function deleteObservation(Request $request, string $pk)
     {
         $repository = $this->getDoctrine()->getRepository(Observations::class);
 
@@ -117,10 +117,10 @@ class ApiObservationController extends AbstractController
             $manager->remove($o);
             $manager->flush();
 
-            return $this->response([], null, 204);
+            return $this->response($request, [], null, 204);
         }
 
-        return $this->response([], "Resource not found", 404);
+        return $this->response($request , [], "Resource not found", 404);
     }
 
     private function validateForm(array $data) : Observations
@@ -140,7 +140,7 @@ class ApiObservationController extends AbstractController
         return $repository->find($pk) ? true : false;
     }
 
-    private function response($data, $message = null, $status_code = 200): Response
+    private function response($request, $data, $message = null, $status_code = 200): Response
     {
         if ($message != null)
         {
@@ -148,6 +148,8 @@ class ApiObservationController extends AbstractController
         }
 
         $response = $this->json($data, $status_code);
+		$response->headers->set("Access-Control-Allow-Origin", $request->headers->get("host"));
+		$response->headers->set("Access-Control-Allow-Credentials", "true");
 
         return $response;
     }
