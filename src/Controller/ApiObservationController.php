@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Psr\Log\LoggerInterface;
 use App\Entity\Observations;
 use App\Form\ObservationsType;
 
@@ -36,6 +37,7 @@ class ApiObservationController extends AbstractController
 
         return $this->response($request, $data);
     }
+    
     /**
      * @Route("/{from}/{to}", name="observation_getFromTo", methods={"GET"})
      */
@@ -49,7 +51,7 @@ class ApiObservationController extends AbstractController
     /**
      * @Route("/", name="observation_post", methods={"POST"})
      */
-    public function createObservation(Request $req): Response
+    public function createObservation(Request $req, LoggerInterface $logger): Response
     {
         $data = json_decode($req->getContent(), true);
 

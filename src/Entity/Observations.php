@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="observations")
  * @ORM\Entity(repositoryClass="App\Repository\ObservationsRepository")
+ * @ORM\Entity
  */
 class Observations
 {
@@ -22,9 +23,9 @@ class Observations
     private $id;
 
     /**
-     * @var \DateTime
+     * @var string
      *
-     * @ORM\Column(name="time", type="datetime", nullable=false)
+     * @ORM\Column(name="time", type="string", length=19, nullable=false)
      */
     private $time;
 
@@ -36,9 +37,9 @@ class Observations
     private $aTemp;
 
     /**
-     * @var int|null
+     * @var string|null
      *
-     * @ORM\Column(name="A_hum", type="integer", nullable=true)
+     * @ORM\Column(name="A_hum", type="decimal", precision=4, scale=2, nullable=true)
      */
     private $aHum;
 
@@ -50,9 +51,9 @@ class Observations
     private $bTemp;
 
     /**
-     * @var int|null
+     * @var string|null
      *
-     * @ORM\Column(name="B_hum", type="integer", nullable=true)
+     * @ORM\Column(name="B_hum", type="decimal", precision=4, scale=2, nullable=true)
      */
     private $bHum;
 
@@ -64,9 +65,9 @@ class Observations
     private $extTemp;
 
     /**
-     * @var int|null
+     * @var string|null
      *
-     * @ORM\Column(name="EXT_hum", type="integer", nullable=true)
+     * @ORM\Column(name="EXT_hum", type="decimal", precision=4, scale=2, nullable=true)
      */
     private $extHum;
 
@@ -75,12 +76,12 @@ class Observations
         return $this->id;
     }
 
-    public function getTime(): ?\DateTimeInterface
+    public function getTime(): ?string
     {
         return $this->time;
     }
 
-    public function setTime(\DateTimeInterface $time): self
+    public function setTime(string $time): self
     {
         $this->time = $time;
 
@@ -99,12 +100,12 @@ class Observations
         return $this;
     }
 
-    public function getAHum(): ?int
+    public function getAHum(): ?string
     {
         return $this->aHum;
     }
 
-    public function setAHum(?int $aHum): self
+    public function setAHum(?string $aHum): self
     {
         $this->aHum = $aHum;
 
@@ -123,12 +124,12 @@ class Observations
         return $this;
     }
 
-    public function getBHum(): ?int
+    public function getBHum(): ?string
     {
         return $this->bHum;
     }
 
-    public function setBHum(?int $bHum): self
+    public function setBHum(?string $bHum): self
     {
         $this->bHum = $bHum;
 
@@ -147,17 +148,15 @@ class Observations
         return $this;
     }
 
-    public function getExtHum(): ?int
+    public function getExtHum(): ?string
     {
         return $this->extHum;
     }
 
-    public function setExtHum(?int $extHum): self
+    public function setExtHum(?string $extHum): self
     {
         $this->extHum = $extHum;
 
         return $this;
     }
-
-
 }
