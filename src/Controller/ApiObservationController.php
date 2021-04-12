@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Psr\Log\LoggerInterface;
 use App\Entity\Observations;
 use App\Form\ObservationsType;
+use App\Repository\ObservationsRepository;
 
 /**
  * @Route("/api/observation")
@@ -18,7 +19,7 @@ class ApiObservationController extends AbstractController
     /**
      * @Route("/{time?}", name="observation_get", methods={"GET"})
      */
-    public function getObservation(Request $request, $time = null): Response
+    public function getObservation(Request $request, string $time = null): Response
     {
         $repository = $this->getDoctrine()->getRepository(Observations::class);
     
@@ -26,7 +27,7 @@ class ApiObservationController extends AbstractController
         {
             $data = $repository->findOneBy(
                 [
-                    'time' => new \DateTime($time)
+                    'time' => (new \DateTime($time))->format("Y-m-d H:i:s")
                 ]
             );
         }
@@ -36,6 +37,88 @@ class ApiObservationController extends AbstractController
         }
 
         return $this->response($request, $data);
+    }
+
+    /**
+     * @Route("/get-by-day/{day}", name="get_by_day", methods={"GET"})
+     */
+    public function getObservationsByDay (Request $req, string $day, ObservationsRepository $rep): Response
+    {
+        $data = $rep->findByDay((new \DateTime($day))->format("Y-m-d"));
+
+        return $this->response($req, $data);
+    }
+
+    /**
+     * @Route("/get-by-month/{year}/{month}", name="get_by_month", methods={"GET"})
+     */
+    public function getObservationsByMonth (Request $req, int $year, int $month, ObservationsRepository $rep): Response
+    {
+        $data = $rep->findByMonth($year, $month);
+
+        return $this->response($req, $data);
+    }
+    
+    /**
+     * @Route("/get-by-year/{year}", name="get_by_year", methods={"GET"})
+     */
+    public function getObservationsByYear (Request $req, int $year, ObservationsRepository $rep): Response
+    {
+        $data = $rep->findByYear($year);
+
+        return $this->response($req, $data);
+    }
+
+    /**
+     * @Route("/get-from-day-to-day/{day1}/{day2}", name="observation_getFromDayToDay", methods={"GET"})
+     */
+    public function getObservationFromDayToDay(Request $request, string $day1, string $day2)
+    {
+        $repository = $this->getDoctrine()->getRepository(Observations::class);
+
+        if ($day1 > $day2)
+        {
+            return $this->response($request, null, "Day $day1 is not < than day $day2", 400);
+        }
+
+        $day1 = (new \DateTime($day1))->format("Y-m-d");
+        $day2 = (new \DateTime($day2))->format("Y-m-d");
+
+        return $this->response($request, $repository->findBetweenTwoDays($day1, $day2));
+    }
+
+    /**
+     * @Route("/get-from-month-to-month/{year1}/{month1}/{year2}/{month2}", name="observation_getFromMonthToMonth", methods={"GET"})
+     */
+    public function getObservationFromMonthToMonth(Request $request, int $year1, int $month1, int $year2, int $month2)
+    {
+        $repository = $this->getDoctrine()->getRepository(Observations::class);
+
+        if ($year1 > $year2)
+        {
+            return $this->response($request, null, "Year $year1 is not < than year $year2", 400);
+        }
+        else if ($year1 == $year2 && $month1 > $month2) 
+        {
+            return $this->response($request, null, "Month $month1 is not < than month $month2", 400);
+        }
+
+        return $this->response($request, $repository->findBetweenTwoMonths($year1, $month1, $year2, $month2));
+    }
+
+    /**
+     * @Route("/get-from-year-to-year/{year1}/{year2}", name="observation_getFromYearToYear", methods={"GET"})
+     */
+    public function getObservationFromYearToYear(Request $request, int $year1, int $year2)
+    {
+        $repository = $this->getDoctrine()->getRepository(Observations::class);
+
+        if ($year1 > $year2)
+        {
+            return $this->response($request, null, "Year $year1 is not < than year $year2", 400);
+        }
+
+        return $this->response($request, $repository->findBetweenTwoYears($year1, $year2));
     }
     
     /**
