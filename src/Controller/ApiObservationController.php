@@ -17,6 +17,16 @@ use App\Repository\ObservationsRepository;
 class ApiObservationController extends AbstractController
 {
     /**
+     * @Route("/last", name="observation_last", methods={"GET"})
+     */
+    public function getLastObservation(Request $request, ObservationsRepository $rep): Response
+    {    
+        $data = $rep->findLast();
+
+        return $this->response($request, $data);
+    }
+    
+    /**
      * @Route("/{time?}", name="observation_get", methods={"GET"})
      */
     public function getObservation(Request $request, string $time = null): Response

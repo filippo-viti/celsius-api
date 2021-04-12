@@ -91,6 +91,14 @@ class ObservationsRepository extends ServiceEntityRepository
         return $query->getQuery()->getResult();
     }
 
+    public function findLast()
+    {
+        $query = $this->createQueryBuilder('o')
+            ->setMaxResults(1);
+
+        return $query->getQuery()->getResult();
+    }
+
     // /**
     //  * @return Observations[] Returns an array of Observations objects
     //  */
