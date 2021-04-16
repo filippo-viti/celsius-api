@@ -99,6 +99,25 @@ class ObservationsRepository extends ServiceEntityRepository
         return $query->getQuery()->getResult();
     }
 
+    public function findAvgOn($field, $day)
+    {
+        $query = $this->createQueryBuilder('o')
+            ->select("AVG(o.$field) as avg_$field")
+            ->groupBy("$field");
+
+        return $query->getQuery()->getResult();
+    }
+
+    public function findYearAvg($field, int $year)
+    {
+        $query = $this->createQueryBuilder('o')
+            ->select("AVG(o.$field) as avg_$field")
+            ->where("YEAR(o.time) = :year")
+            ->setParameter("year", $year);
+
+        return $query->getQuery()->getResult();
+    }
+
     // /**
     //  * @return Observations[] Returns an array of Observations objects
     //  */

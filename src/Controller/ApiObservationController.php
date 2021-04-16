@@ -98,6 +98,22 @@ class ApiObservationController extends AbstractController
     }
 
     /**
+     * @Route("/get-avg-on/{day}/{field}", methods={"GET"})
+     */
+    public function getAvgOn(Request $req, string $day, string $field, ObservationsRepository $rep): Response
+    {
+        return $this->response($req, $rep->findAvgOn($day, $field));
+    }
+
+    /**
+     * @Route("/get-year-avg/{year}/{field}", methods={"GET"})
+     */
+    public function getYearAvg(Request $req, int $year, string $field, ObservationsRepository $rep)
+    {
+        return $this->response($req, $rep->findYearAvg($field, $year));
+    }
+
+    /**
      * @Route("/get-from-month-to-month/{year1}/{month1}/{year2}/{month2}", name="observation_getFromMonthToMonth", methods={"GET"})
      */
     public function getObservationFromMonthToMonth(Request $request, int $year1, int $month1, int $year2, int $month2)

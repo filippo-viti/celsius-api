@@ -24,7 +24,7 @@ class Observations
     /**
      * @var string
      *
-     * @ORM\Column(name="time", type="string", length=19, nullable=false)
+     * @ORM\Column(name="time", type="string", length=19, nullable=false, unique=true)
      */
     private $time;
 
