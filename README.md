@@ -25,10 +25,11 @@ Creare il file ```.env.local``` e inserire all'interno l'URL di connessione al d
 ```
 DATABASE_URL="mysql://<db_user>:<db_password>@127.0.0.1:3306/<db_name>"
 ```
-Eseguire i seguenti comandi per creare il database, lo schema e importare i dati:
+Eseguire i seguenti comandi per creare il database, lo schema e caricare l'utente base:
 ```bash
 symfony console doctrine:database:create
 symfony console doctrine:schema:create
+symfony console doctrine:fixtures:load
 ```
 Importare il database contenuto nel file 2019.csv
 
