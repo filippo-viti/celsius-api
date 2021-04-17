@@ -29,8 +29,8 @@ Eseguire i seguenti comandi per creare il database, lo schema e importare i dati
 ```bash
 symfony console doctrine:database:create
 symfony console doctrine:schema:create
-sudo mysql < observations.sql
 ```
+Importare il database contenuto nel file 2019.csv
 
 ## Esecuzione
 Per avviare il WebService (resterà in ascolto sulla porta 8000):
