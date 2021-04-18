@@ -26,6 +26,14 @@ class ApiObservationController extends AbstractController
 
         return $this->response($request, $data);
     }
+
+    /**
+     * @Route("/get-available-year", name="observation_getAvailableYear", methods={"GET"})
+     */
+    public function getAllAvailableYears(Request $req, ObservationsRepository $rep): Response
+    {
+        return $this->response($req, $rep->findAllYear());
+    }
     
     /**
      * @Route("/{time?}", name="observation_get", methods={"GET"})
@@ -101,9 +109,17 @@ class ApiObservationController extends AbstractController
     /**
      * @Route("/get-avg-on/{day}/{field}", methods={"GET"})
      */
-    public function getAvgOn(Request $req, string $day, string $field, ObservationsRepository $rep): Response
+    public function getDayAvg(Request $req, string $day, string $field, ObservationsRepository $rep): Response
     {
-        return $this->response($req, $rep->findAvgOn($day, $field));
+        return $this->response($req, $rep->findAvgOn($field, $day));
+    }
+
+    /**
+     * @Route("/get-month-avg/{year}/{month}/{field}", methods={"GET"})
+     */
+    public function getMonthAvg(Request $req, int $year, int $month, string $field, ObservationsRepository $rep)
+    {
+        return $this->response($req, $rep->findMonthAvg($field, $year, $month));
     }
 
     /**

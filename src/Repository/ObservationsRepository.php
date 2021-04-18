@@ -103,7 +103,8 @@ class ObservationsRepository extends ServiceEntityRepository
     {
         $query = $this->createQueryBuilder('o')
             ->select("AVG(o.$field) as avg_$field")
-            ->groupBy("$field");
+            ->where("DATE(o.time) = :day")
+            ->setParameter("day", $day);
 
         return $query->getQuery()->getResult();
     }
@@ -114,6 +115,26 @@ class ObservationsRepository extends ServiceEntityRepository
             ->select("AVG(o.$field) as avg_$field")
             ->where("YEAR(o.time) = :year")
             ->setParameter("year", $year);
+
+        return $query->getQuery()->getResult();
+    }
+
+    public function findMonthAvg ($field, int $year, int $month)
+    {
+        $query = $this->createQueryBuilder('o')
+            ->select("AVG(o.$field) as avg_$field")
+            ->where("YEAR(o.time) = :year")
+            ->andWhere("MONTH(o.time) = :month")
+            ->setParameter("year", $year)
+            ->setParameter("month", $month);
+
+        return $query->getQuery()->getResult();
+    }
+
+    public function findAllYear()
+    {
+        $query = $this->createQueryBuilder('o')
+            ->select("DISTINCT YEAR(o.time) as year");
 
         return $query->getQuery()->getResult();
     }
