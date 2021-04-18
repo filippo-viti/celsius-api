@@ -23,6 +23,7 @@ class UserFixtures extends Fixture
         $user->setPassword(
             $this->passwordEncoder->encodePassword($user, "Abcd1234")
         );
+        $user->setApiToken("BANANA-TOKEN-2021");
 
         $manager->persist($user);
         $manager->flush();
