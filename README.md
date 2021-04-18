@@ -18,21 +18,20 @@ composer install
 Per prima cosa, creare l'utente MySQL:
 ```sql
 sudo mysql
-CREATE USER <db_user>@localhost IDENTIFIED BY '<db_password>';
-GRANT ALL PRIVILEGES ON <db_name>.* TO <db_user>@localhost WITH GRANT OPTION;
+CREATE USER [db_user]@localhost IDENTIFIED BY '[db_password]';
+GRANT ALL PRIVILEGES ON [db_name].* TO [db_user]@localhost WITH GRANT OPTION;
 ```
 Creare il file ```.env.local``` e inserire all'interno l'URL di connessione al database:
 ```
-DATABASE_URL="mysql://<db_user>:<db_password>@127.0.0.1:3306/<db_name>"
+DATABASE_URL="mysql://[db_user]:[db_password]@127.0.0.1:3306/[db_name]"
 ```
-Eseguire i seguenti comandi per creare il database, lo schema e caricare l'utente base:
+Eseguire i seguenti comandi per creare il database, lo schema e importare i dati:
 ```bash
 symfony console doctrine:database:create
 symfony console doctrine:schema:create
 symfony console doctrine:fixtures:load
+sudo mysql [dbname] < 2019.csv.sql
 ```
-Importare il database contenuto nel file 2019.csv
-
 ## Esecuzione
 Per avviare il WebService (resterà in ascolto sulla porta 8000):
 ```bash
