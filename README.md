@@ -32,8 +32,55 @@ symfony console doctrine:schema:create
 symfony console doctrine:fixtures:load
 sudo mysql [dbname] < 2019.csv.sql
 ```
-## Esecuzione
+## Avvio del server
 Per avviare il WebService (resterà in ascolto sulla porta 8000):
 ```bash
 symfony serve
 ```
+
+## Utilizzo 
+Nota: il formato dei datetime è ```yyyy-MM-dd HH:mm:ss```  
+I parametri day, month e year sono int se non specificato
+
+### GET
+GET generiche:
+- ```/api/observation/```  
+Per ottenere tutti i dati
+- ```/api/observation/{datetime}```  
+Restituisce i dati di uno specifico istante
+
+GET per periodo:
+- ```/api/observation/{from_datetime}/{to_datetime}```
+- ```/api/observation/get-by-day/{date}```  
+(data in formato ```yyyy-MM-dd```)
+- ```/api/observation/get-by-month/{year}/{month}```  
+- ```/api/observation/get-by-year/{year}```
+- ```/api/observation/get-from-day-to-day/{date1}/{date2}```  
+(date in formato ```yyyy-MM-dd```)
+- ```/api/observation/get-from-month-to-month/{year1}/{month1}/{year2}/{month2}```
+- ```/api/observation/get-from-year-to-year/{year1}/{year2}```
+
+GET dei valori medi:
+- ```/api/observation/get-avg-on/{day}/{field}```
+- ```/api/observation/get-year-avg/{year}/{field}```  
+Field disponibili ```time```, ```aTemp```, ```aHum```, ```bTemp```, ```bHum```, ```extTemp```, ```extHum```
+
+### POST
+```/api/observation/```  
+Passare la risorsa in formato JSON nel body della richiesta. Esempio:
+```json
+{
+  "time": "2019-12-31 23:30:00",
+  "aTemp": "15.6",
+  "aHum": "90",
+  "bTemp": "15.4",
+  "bHum": "99.9",
+  "extTemp": "4.4",
+  "extHum": "87.7"
+}
+```
+### PUT
+```/api/observation/{id}```   
+Come POST ma nell'URL bisogna specificare l'id
+### DELETE
+```/api/observation/{id}```
