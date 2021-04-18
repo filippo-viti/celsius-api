@@ -15,9 +15,10 @@ composer install
 ```
 
 ## Creazione del database
-Per prima cosa, creare l'utente MySQL:
+Per prima cosa, dovete creare l'utente su mysql, quindi,
+utilizzando un client mysql (ex. [DBeaver](https://dbeaver.io/), [phpMyAdmin](https://www.phpmyadmin.net/)) date
+i seguenti comandi sql:
 ```sql
-sudo mysql
 CREATE USER [db_user]@localhost IDENTIFIED BY '[db_password]';
 GRANT ALL PRIVILEGES ON [db_name].* TO [db_user]@localhost WITH GRANT OPTION;
 ```
@@ -30,8 +31,15 @@ Eseguire i seguenti comandi per creare il database, lo schema e importare i dati
 symfony console doctrine:database:create
 symfony console doctrine:schema:create
 symfony console doctrine:fixtures:load
+```
+
+Per inserire i dati, utilizzare un client mysql (ex. [DBeaver](https://dbeaver.io/), [phpMyAdmin](https://www.phpmyadmin.net/)) importando
+il file ```2019.csv.sql```.
+**N.B.**: se lavori su ambiente Unix, puoi direttamente scrivere nel terminale:
+```bash
 sudo mysql [dbname] < 2019.csv.sql
 ```
+
 ## Avvio del server
 Per avviare il WebService (resterà in ascolto sulla porta 8000):
 ```bash
@@ -40,7 +48,7 @@ symfony serve
 
 ## Utilizzo 
 Il formato dei datetime è ```yyyy-MM-dd HH:mm:ss```  
-I parametri day, month e year sono int se non specificato
+I parametri day, month e year sono int se non specificato  
 Tutte le richieste necessitano di autenticazione tramite l'header ```X-AUTH-TOKEN```. Il token di default è "BANANA-TOKEN-2021"
 
 ### GET
