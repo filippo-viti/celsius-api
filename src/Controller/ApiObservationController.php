@@ -10,6 +10,7 @@ use Psr\Log\LoggerInterface;
 use App\Entity\Observations;
 use App\Form\ObservationsType;
 use App\Repository\ObservationsRepository;
+use Psr\Log\Test\LoggerInterfaceTest;
 
 /**
  * @Route("/api/observation")
@@ -160,13 +161,13 @@ class ApiObservationController extends AbstractController
     /**
      * @Route("/", name="observation_post", methods={"POST"})
      */
-    public function createObservation(Request $req, LoggerInterface $logger): Response
+    public function createObservation(Request $req): Response
     {
         $data = json_decode($req->getContent(), true);
 
-        if ($this->exists($data["time"]))
+        if ($this->exists(["time" => $data["time"]]))
         {
-            return $this->response($req,[], "The resource already exists", 409);
+            return $this->response($req, [], "The resource already exists", 409);
         }
 
         $manager = $this->getDoctrine()->getManager();
@@ -178,11 +179,16 @@ class ApiObservationController extends AbstractController
             $manager->persist($o);
             $manager->flush();
 
-            return $this->response(
-                $this->getDoctrine()->getRepository(Observations::class)->findOneBy($data["time"]),
+            $res = $this->response(
+                $req,
+                [],
                 null,
                 201
-            )->headers->set("Location", "/api/observations/$data[time]");
+            );
+
+            $res->headers->set("Location", "/api/observations/$data[time]");
+
+            return $res;
         }
         
         return $this->response($req, [], "Bad request", 400);
@@ -209,7 +215,7 @@ class ApiObservationController extends AbstractController
             );
         }
 
-        return $this->error([], "Bad request", 400);
+        return $this->response($req, [], "Bad request", 400);
     }
 
     /**
@@ -234,7 +240,7 @@ class ApiObservationController extends AbstractController
         return $this->response($request , [], "Resource not found", 404);
     }
 
-    private function validateForm(array $data) : Observations
+    private function validateForm(array $data)
     {
         $c = new Observations();
         $form = $this->createForm(ObservationsType::class, $c); // di default il terzo parametro sarebbe ["method" => "POST"]
@@ -244,24 +250,33 @@ class ApiObservationController extends AbstractController
         return $form->isValid() ? $c : null;
     }
 
-    private function exists($pk) : bool
+    private function exists(array $values) : bool
     {
-        $repository = $this->getDoctrine()->getRepository(Observations::class);
+        if (array_key_exists("id", $values))
+        {
+            $repository = $this->getDoctrine()->getRepository(Observations::class);
 
-        return $repository->find($pk) ? true : false;
+            return $repository->find($values["id"]) ? true : false;
+        }
+        else if (array_key_exists("time", $values))
+        {
+            $repository = $this->getDoctrine()->getRepository(Observations::class);
+
+            return $repository->findOneBy(["time" => $values["time"]]) ? true : false;
+        }
     }
 
-    private function response($request, $data, $message = null, $status_code = 200): Response
+    private function response(Request $request, $data, $message = null, $status_code = 200): Response
     {
         if ($message != null)
         {
             $data["error"] = $message;
         }
 
-        $response = $this->json($data, $status_code);
-		$response->headers->set("Access-Control-Allow-Origin", $request->headers->get("host"));
-		$response->headers->set("Access-Control-Allow-Credentials", "true");
+        $res = $this->json($data, $status_code);
+		$res->headers->set("Access-Control-Allow-Origin", $request->headers->get("host"));
+		$res->headers->set("Access-Control-Allow-Credentials", "true");
 
-        return $response;
+        return $res;
     }
 }
