@@ -39,8 +39,9 @@ symfony serve
 ```
 
 ## Utilizzo 
-Nota: il formato dei datetime è ```yyyy-MM-dd HH:mm:ss```  
+Il formato dei datetime è ```yyyy-MM-dd HH:mm:ss```  
 I parametri day, month e year sono int se non specificato
+Tutte le richieste necessitano di autenticazione tramite l'header ```X-AUTH-TOKEN```. Il token di default è "BANANA-TOKEN-2021"
 
 ### GET
 GET generiche:
